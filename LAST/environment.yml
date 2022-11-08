@@ -1,0 +1,11 @@
+name: last
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7
+  - scikit-learn
+  - openmm
+  - mdtraj
+  - MDAnalysis
+  - tensorflow
+  - statsmodels
