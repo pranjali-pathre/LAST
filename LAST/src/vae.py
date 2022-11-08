@@ -15,6 +15,9 @@ def sampling(args):
     """Sample from normal distribution.
     """
     z_mean, z_log_var, latent_dim = args
+
+    assert isinstance(latent_dim, int)
+
     epsilon = K.random_normal(
         shape=(K.shape(z_mean)[0], latent_dim), mean=0., stddev=1.
     )
@@ -42,6 +45,11 @@ def vae_encoder(input_dim, neuron_nums, latent_dim=2):
     encoder_input : keras.Model.Input
         Encoder input layer
     """
+
+    assert isinstance(input_dim, tuple)
+    assert isinstance(neuron_nums, list)
+    assert isinstance(latent_dim, int)
+
     encoder_input = layer = Input(shape=input_dim)
 
     for neuron_num in neuron_nums:
@@ -73,6 +81,10 @@ def vae_decoder(input_dim, neuron_nums, latent_dim=2):
     decoder : keras.Model
         Decoder model.
     """
+    assert isinstance(input_dim, tuple)
+    assert isinstance(neuron_nums, list)
+    assert isinstance(latent_dim, int)
+
     latent_inputs = layer = Input(shape=(latent_dim,))
 
     for neuron_num in neuron_nums:
@@ -111,6 +123,12 @@ def build_vae(
     vae : keras.Model
         constructed VAE model
     """
+
+    assert isinstance(input_dim, tuple)
+    assert isinstance(encoder_neuron_nums, list)
+    assert isinstance(decoder_neuron_nums, (list, type(None)))
+    assert isinstance(latent_dim, int)
+
     encoder, z_mean, z_log_var, encoder_input = vae_encoder(
         input_dim, encoder_neuron_nums, latent_dim)
 

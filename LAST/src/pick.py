@@ -45,13 +45,18 @@ decoded_structure = scaler.inverse_transform(decoded_structure) * 10
 real_structure = scaler.inverse_transform(coors_scaled) * 10
 
 
-def rmsd(p_1, p_2):
+def rmsd(p_1, p_2, val=None):
     """RMSD calculation
     """
+    if(val is None):
+        val = trajs.n_atoms
     p_1 = p_1.reshape(-1, 3)
     p_2 = p_2.reshape(-1, 3)
-    return np.sqrt(np.sum(np.square(p_1 - p_2)) / trajs.n_atoms)
 
+    assert p_1.shape  == p_2.shape
+    assert val != 0
+    
+    return np.sqrt(np.sum(np.square(p_1 - p_2)) / val)
 
 # nonparametric fit
 dens_u = sm.nonparametric.KDEMultivariate(
