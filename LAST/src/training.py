@@ -9,20 +9,21 @@ import mdtraj as md
 from sklearn.preprocessing import MinMaxScaler
 from vae import build_vae
 
-
 PDB = sys.argv[1]
-ITER_ROUND = int(sys.argv[2])
-
+ITER_ROUND = sys.argv[2]
+ITER_ROUND = int(ITER_ROUND)
+STR1 = "../trajs/" + str(PDB) + "_aligned.dcd"
+STR2 = "../inputs/" + str(PDB) + ".prmtop"
 # heavy atom indices
-trajs = md.load(
-    f"../trajs/{PDB}_aligned.dcd", top=f"../inputs/{PDB}.prmtop"
-)
+trajs = md.load(STR1, top=STR2)
 trajs = trajs.atom_slice(
     trajs.topology.select_atom_indices("heavy")
 )
 
-frames = trajs.n_frames // (ITER_ROUND + 1)
-coors = trajs.xyz
+frames = trajs.n_frames
+frames = frames // (ITER_ROUND + 1)
+coors = trajs
+coors = coors.xyz
 coors = coors.reshape(trajs.n_frames, -1)
 
 # scale
@@ -35,7 +36,7 @@ encoder, decoder, vae = build_vae(
     latent_dim=2
 )
 
-history = vae.fit(
+HISTORY = vae.fit(
     x=coors_scaled, y=coors_scaled,
     shuffle=True, epochs=400, batch_size=16
 )

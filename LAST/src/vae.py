@@ -4,12 +4,12 @@
 """
 
 import numpy as np
-from tensorflow.keras import backend as K
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input, Dense, Lambda
-from tensorflow.keras.losses import binary_crossentropy
-from tensorflow.keras.optimizers import Adam
-
+# from tensorflow import keras
+from keras import backend as K
+from keras.models import Model
+from keras.layers import Input, Dense, Lambda
+from keras.losses import binary_crossentropy
+from keras.optimizers import Adam
 
 def sampling(args):
     """Sample from normal distribution.

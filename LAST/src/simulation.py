@@ -1,14 +1,13 @@
 #!/usr/bin/env python
+# pylint: disable=consider-using-f-string
 
-"""Conduct MD simulations
-"""
+"""Conduct MD simulations"""
 
 import sys
 import glob
 import MDAnalysis as mda
 from MDAnalysis.analysis import align
 from amber import Amber
-
 
 PDB = sys.argv[1]
 ITER_ROUND = int(sys.argv[2])
@@ -21,12 +20,14 @@ for i in range(1, 11):
         amber.set_cor_file(f"../rst/{PDB}_100ps_npt_rts")
         amber.set_up_simulation(sim_type='nvt', minimize_energy=True)
     else:
-        cor_file = f"../rst/{PDB}_r{ITER_ROUND}_rst." + "{0:02d}".format(i)
+        STR1 = "../rst/" + str(PDB) + "_r" + str(ITER_ROUND) + "_rst."
+        cor_file = STR1 + "{0:02d}".format(i)
         amber.set_cor_file(cor_file)
         amber.set_up_simulation(sim_type='nvt', minimize_energy=False)
 
     amber.set_simulation_time(total_steps=50000, report_interval=500)
-    dcd_file_name = f"../trajs/{PDB}_r{ITER_ROUND}_s" + "{0:02d}".format(i)
+    STR2 = "../trajs/" + str(PDB) + "_r" + str(ITER_ROUND) + "_s."
+    dcd_file_name = STR2 + "{0:02d}".format(i)
     amber.do_simulation(file_name=dcd_file_name)
 
     # prompt progress info

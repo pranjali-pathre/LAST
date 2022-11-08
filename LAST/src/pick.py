@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# pylint: disable=consider-using-f-string
 
 """Seed structure selection
 """
@@ -12,7 +13,6 @@ from tensorflow import keras
 from sklearn.preprocessing import MinMaxScaler
 import mdtraj as md
 import statsmodels.api as sm
-
 
 PDB = sys.argv[1]
 ITER_ROUND = int(sys.argv[2])
@@ -48,14 +48,13 @@ real_structure = scaler.inverse_transform(coors_scaled) * 10
 def rmsd(p_1, p_2, val=None):
     """RMSD calculation
     """
-    if(val is None):
+    if val is None:
         val = trajs.n_atoms
     p_1 = p_1.reshape(-1, 3)
     p_2 = p_2.reshape(-1, 3)
 
     assert p_1.shape  == p_2.shape
     assert val != 0
-    
     return np.sqrt(np.sum(np.square(p_1 - p_2)) / val)
 
 # nonparametric fit
@@ -129,20 +128,18 @@ while CURR_IDX >= 0 and len(outliers) < 10:
 del trajs
 del coors
 
-
 for i, num in enumerate(outliers):
     round_num = num // frames
     seed_num = (num - round_num * frames) // 100 + 1
-
-    trajs = md.load(
-        f'../trajs/{PDB}_r{round_num}_' + 's{0:02d}.dcd'.format(seed_num),
-        top=f"../inputs/{PDB}.prmtop"
-    )
+    STR1 = '../trajs/' + str(PDB) + '_r' + str(round_num) + '_'
+    STR2 = 's{0:02d}.dcd'.format(seed_num)
+    STR3 = "../inputs/" + str(PDB) + ".prmtop"
+    trajs = md.load(STR1 + STR2, top=STR3)
 
     out_idx = num - round_num * frames - 100 * (seed_num - 1)
-    trajs[out_idx].save_amberrst7(
-        f'../rst/{PDB}_r{ITER_ROUND + 1}_rst.' + '{0:02d}'.format(i + 1)
-    )
+    STR4 = '../rst/' + str(PDB) + '_r' + str(ITER_ROUND + 1) + '_rst.'
+    STR5 = '{0:02d}'.format(i + 1)
+    trajs[out_idx].save_amberrst7(STR4 + STR5)
 
 # save structure
 with open(f"../results/{PDB}_structure.pkl", "wb") as structure_file:
