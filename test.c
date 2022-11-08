@@ -17,20 +17,20 @@ RUN wget \
     && rm -f Miniconda3-latest-Linux-x86_64.sh
 RUN conda --version
 
-RUN conda create -n last python=3.7 -y
-WORKDIR /opt/
-RUN activate last
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
 RUN pip install psutil
 RUN pip install scikit-learn --no-cache-dir
+RUN pip install openmm --no-cache-dir
 RUN pip install mdtraj --no-cache-dir
 RUN pip install MDAnalysis --no-cache-dir
 RUN pip install tensorflow --no-cache-dir
 RUN pip install statsmodels --no-cache-dir
-RUN conda install -c conda-forge openmm
-
-COPY LAST /opt/
+RUN pip install openmm
 WORKDIR /opt/src/
 
+ENV PATH="/opt/venv/bin:$PATH"
+COPY LAST /opt/
 RUN chmod +x ./run.sh
 ENTRYPOINT ["./run.sh"]
