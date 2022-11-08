@@ -33,5 +33,3 @@ RUN pip install MDAnalysis --no-cache-dir
 RUN pip install tensorflow --no-cache-dir
 RUN pip install statsmodels --no-cache-dir
 COPY LAST /opt/
-# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "800"]
-# CMD ["uvicorn", "/opt/main:app"]
